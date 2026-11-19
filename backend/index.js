@@ -4,6 +4,7 @@ const app = express();
 require('dotenv').config();
 const knex = require('knex')(require('./knexfile')[process.env.NODE_ENV || 'development']);
 const bcrypt = require('bcryptjs');
+const { createToken, validateToken } = require('./JWT');
 
 const PORT = process.env.PORT;
 
@@ -60,11 +61,10 @@ app.post("/login", async (req, res) => {
     const userInfo = req.body
 
     const user = await knex("users").select().where({username: userInfo.username}).first();
-    console.log(`comparing ${userInfo.password} with ${user.password}`);
     bcrypt.compare(userInfo.password, user.password, (err, response) => {
         if (response) {
-            const loggedInCookie = "loggedIn";
-            res.cookie("loginCookie", loggedInCookie, {
+            const accessToken = createToken(user);
+            res.cookie("accessToken", accessToken, {
                 maxAge: 60 * 60 * 24 * 30 * 1000,
             })
 
