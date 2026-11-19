@@ -56,6 +56,31 @@ app.delete("/users/:userID", (req, res) => {
     .catch(err => res.status(400).json({message: err}))
 })
 
+app.post("/login", async (req, res) => {
+    const userInfo = req.body
+
+    const user = await knex("users").select().where({username: userInfo.username}).first();
+    console.log(`comparing ${userInfo.password} with ${user.password}`);
+    bcrypt.compare(userInfo.password, user.password, (err, response) => {
+        if (response) {
+            const loggedInCookie = "loggedIn";
+            res.cookie("loginCookie", loggedInCookie, {
+                maxAge: 60 * 60 * 24 * 30 * 1000,
+            })
+
+            const returnUser = {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+            };
+            res.status(200).json(returnUser)
+        } else {
+            res.send({message: "Incorrect username or password"});
+        }
+    })
+})
+
 app.get("/items", (req, res) => {
     knex("item").select()
     .then(data => res.status(200).json(data))
