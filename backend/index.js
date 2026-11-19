@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 const knex = require('knex')(require('./knexfile')[process.env.NODE_ENV || 'development']);
+const bcrypt = require('bcryptjs');
 
 const PORT = process.env.PORT;
 
@@ -27,8 +28,11 @@ app.get("/users/:userID", (req, res) => {
     .catch(err => res.status(400).json({message: err}))
 })
 
-app.post("/users", (req, res) => {
+app.post("/users", async (req, res) => {
     const user = req.body
+    const hash = await bcrypt.hash(user.password, 10);
+
+    user.password = hash;
 
     knex("users").insert(user).returning('*')
     .then(data => res.status(200).json(data))
