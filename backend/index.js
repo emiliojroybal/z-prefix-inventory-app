@@ -61,6 +61,11 @@ app.post("/login", async (req, res) => {
     const userInfo = req.body
 
     const user = await knex("users").select().where({username: userInfo.username}).first();
+    if (!user) {
+        res.status(401).json({message: "Incorrect username or password"});
+        return;
+    }
+
     bcrypt.compare(userInfo.password, user.password, (err, response) => {
         if (response) {
             const accessToken = createToken(user);
@@ -76,19 +81,45 @@ app.post("/login", async (req, res) => {
             };
             res.status(200).json(returnUser)
         } else {
-            res.send({message: "Incorrect username or password"});
+            res.status(401).json({message: "Incorrect username or password"});
         }
     })
 })
 
-app.get("/items", (req, res) => {
-    knex("item").select()
-    .then(data => res.status(200).json(data))
-    .catch(err => res.status(400).json({message: err}));
+app.get("/items", async (req, res) => {
+    const userID = req.query.userID;
+    const expandUser = req.query.expandUser;
+
+    try {
+        const itemData = await knex("item").select().modify((queryBuilder) => {
+            if (userID !== undefined && userID !== null && userID !== '') {
+                queryBuilder.where({userID: userID});
+            }
+        });
+        console.log(itemData);
+
+        if (expandUser) {
+            for (let item of itemData) {
+                console.log(`Trying to find user ${item.userID} for item ${item.itemName}`);
+                const userData = await knex("users").select().where({id: item.userID}).first()
+                console.log("Found user data to be: ");
+                console.log(userData);
+                delete item.userID;
+                item.user = {
+                    id: userData.id,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    username: userData.username,
+                }
+            }
+        }
+
+        res.status(200).json(itemData);
+    } catch (err) {res.status(400).json({message: err})};
 })
 
 app.get("/items/:itemID", (req, res) => {
-    const itemID = req.params.itemID
+    const itemID = req.params.itemID;
 
     knex("item").select().where({id: itemID}).first()
     .then(data => res.status(200).json(data))
