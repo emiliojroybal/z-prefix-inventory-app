@@ -5,11 +5,16 @@ require('dotenv').config();
 const knex = require('knex')(require('./knexfile')[process.env.NODE_ENV || 'development']);
 const bcrypt = require('bcryptjs');
 const { createToken, validateToken } = require('./JWT');
+const cookieParser = require('cookie-parser')
 
 const PORT = process.env.PORT;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
     res.status(200).json({message: "Connected successfully!"});
@@ -84,6 +89,29 @@ app.post("/login", async (req, res) => {
             res.status(401).json({message: "Incorrect username or password"});
         }
     })
+});
+
+app.post("/logout", (req, res) => {
+    res.clearCookie('accessToken');
+    return res.status(200).json({message: "Logged out successfully"});
+});
+
+app.get("/auth/me", validateToken, async (req, res) => {
+    const id = req.userID;
+    console.log("Validated user with ID " + id);
+
+    try {
+        const user = await knex("users").select().where({id: id}).first();
+
+        const returnUser = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+        }
+
+        res.status(200).json(returnUser);
+    } catch (err) {res.status(401).json({message: err})}
 })
 
 app.get("/items", async (req, res) => {
@@ -96,14 +124,10 @@ app.get("/items", async (req, res) => {
                 queryBuilder.where({userID: userID});
             }
         });
-        console.log(itemData);
 
         if (expandUser) {
             for (let item of itemData) {
-                console.log(`Trying to find user ${item.userID} for item ${item.itemName}`);
                 const userData = await knex("users").select().where({id: item.userID}).first()
-                console.log("Found user data to be: ");
-                console.log(userData);
                 delete item.userID;
                 item.user = {
                     id: userData.id,

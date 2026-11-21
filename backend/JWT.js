@@ -9,6 +9,7 @@ const createToken = (user) => {
 
 const validateToken = (req, res, next) => {
     const accessToken = req.cookies?.accessToken;
+    console.log("Trying to validate access token " + accessToken);
 
     if (!accessToken) return res.status(400).json({validated: false});
 

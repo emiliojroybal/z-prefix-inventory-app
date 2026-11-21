@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios";
 
-export function LoginModal({setShowLogin}: {setShowLogin: Function}) {
+export function LoginModal({setShowLogin, setLoggedInUser}: {setShowLogin: Function, setLoggedInUser: Function}) {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -13,6 +13,7 @@ export function LoginModal({setShowLogin}: {setShowLogin: Function}) {
         });
 
         console.log(response.data);
+        setLoggedInUser(response.data);
         setShowLogin(false);
     }
 
