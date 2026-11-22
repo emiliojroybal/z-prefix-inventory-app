@@ -41,7 +41,10 @@ app.post("/users", async (req, res) => {
     user.password = hash;
 
     knex("users").insert(user).returning('*')
-    .then(data => res.status(200).json(data))
+    .then(data => {
+        delete data[0]["password"];
+        res.status(200).json(data[0]);
+    })
     .catch(err => res.status(400).json({message: err}))
 })
 
@@ -142,12 +145,26 @@ app.get("/items", async (req, res) => {
     } catch (err) {res.status(400).json({message: err})};
 })
 
-app.get("/items/:itemID", (req, res) => {
+app.get("/items/:itemID", async (req, res) => {
     const itemID = req.params.itemID;
+    const expandUser = req.query.expandUser;
 
-    knex("item").select().where({id: itemID}).first()
-    .then(data => res.status(200).json(data))
-    .catch(err => res.status(400).json({message: err}))
+    try {
+        const itemData = await knex("item").select().where({id: itemID}).first();
+
+        if (expandUser) {
+            const userData = await knex("users").select().where({id: itemData.userID}).first()
+            delete itemData.userID;
+            itemData.user = {
+                id: userData.id,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                username: userData.username,
+            }
+        }
+
+        res.status(200).json(itemData);
+    } catch (err) {res.status(400).json({message: err})};
 })
 
 app.post("/items", (req, res) => {

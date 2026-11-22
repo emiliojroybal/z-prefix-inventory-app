@@ -4,21 +4,10 @@ import { NavBar } from './components/NavBar'
 import { MainPage } from './pages/MainPage'
 import AppContext from './context/AppContext'
 import axios from 'axios'
+import useAuth from './hooks/useAuth'
 
 function App() {
-  const [loggedInUser, setLoggedInUser] = useState(null)
-
-  useEffect(() => {
-    const attemptLogin = async () => {
-      const response = await axios.get("http://localhost:3000/auth/me", {
-        withCredentials: true,
-      });
-
-      setLoggedInUser(response.data);
-    }
-
-    attemptLogin();
-  }, [])
+  const [loggedInUser, setLoggedInUser] = useAuth();
 
   return (
     <AppContext.Provider value={loggedInUser}>

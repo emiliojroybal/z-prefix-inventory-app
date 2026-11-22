@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios";
 
-export function LoginModal({setShowLogin, setLoggedInUser}: {setShowLogin: Function, setLoggedInUser: Function}) {
+export function LoginModal({setShowLogin, setLoggedInUser, setShowSignUp}: {setShowLogin: Function, setLoggedInUser: Function, setShowSignUp: Function}) {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -28,6 +28,11 @@ export function LoginModal({setShowLogin, setLoggedInUser}: {setShowLogin: Funct
         setFormData((prev) => ({ ...prev, [name]: value}));
     }
 
+    const switchToSignUp = () => {
+        setShowLogin(false);
+        setShowSignUp(true);
+    }
+
     return (
         <div className="modal">
             <div className="modal-background" onClick={() => setShowLogin(false)}></div>
@@ -45,6 +50,7 @@ export function LoginModal({setShowLogin, setLoggedInUser}: {setShowLogin: Funct
                         <p>Password</p>
                         <input type="password" name="password" value={formData.password} onChange={handleChange}></input>
                     </div>
+                    <p className="account-register-text" onClick={switchToSignUp}>Register for an account</p>
                     <button type="submit">Submit</button>
                 </form>
             </div>

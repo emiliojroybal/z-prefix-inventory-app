@@ -1,6 +1,7 @@
 
 
 export function ItemBox({ item, setSelectedItem }: { item: object; setSelectedItem: Function }) {
+
     let itemDescription = item.description;
     if (itemDescription.length > 100) {
         itemDescription = itemDescription.slice(0, 100) + "...";
