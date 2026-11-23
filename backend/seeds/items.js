@@ -4,7 +4,7 @@
  */
 exports.seed = async function(knex) {
   // Deletes ALL existing entries
-  await knex('item').del()
+  await knex.raw('TRUNCATE TABLE item RESTART IDENTITY CASCADE');
   await knex('item').insert([
     {userID: 1, itemName: "NVIDIA RTX 5090", description: "A high-end consumer graphics card built for 4K and 8K gaming, real-time ray tracing, and demanding creative workloads, featuring 32GB of fast GDDR7 memory and a substantial cooling solution.", quantity: 5},
     {userID: 1, itemName: "NVIDIA RTX 4090", description: "A lesser high-end consumer graphics card that still delivers excellent 4K gaming and content creation performance with 24GB of GDDR6X memory, at a lower price than the newest flagship model.", quantity: 10},
