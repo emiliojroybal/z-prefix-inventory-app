@@ -47,7 +47,7 @@ export default function NewItemModal({setShowNewItem, setInventoryRefresh}: {set
                     <h3>New Item</h3>
                     <div className="form-entry-field">
                         <p>Item Name</p>
-                        <input type="text" name="itemName" value={formData.itemName} onChange={handleChange}></input>
+                        <input type="text" name="itemName" value={formData.itemName} onChange={handleChange} required></input>
                     </div>
                     <div className="form-entry-field">
                         <p>Description</p>
