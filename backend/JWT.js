@@ -1,5 +1,6 @@
 const {sign, verify} = require('jsonwebtoken');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const createToken = (user) => {
     const accessToken = sign({username: user.username, id: user.id}, process.env.JWT_SECRET);
@@ -9,9 +10,9 @@ const createToken = (user) => {
 
 const validateToken = (req, res, next) => {
     const accessToken = req.cookies?.accessToken;
-    console.log("Trying to validate access token " + accessToken);
 
-    if (!accessToken) return res.status(400).json({validated: false});
+    if (!accessToken) return res.status(401).json({validated: false});
+    console.log("Trying to validate access token " + accessToken);
 
     try {
         const validToken = verify(accessToken, process.env.JWT_SECRET);
@@ -20,7 +21,7 @@ const validateToken = (req, res, next) => {
             req.userID = validToken.id;
             return next();
         }
-    } catch (err) {return res.status(400).json({error: err, validated: false})};
+    } catch (err) {return res.status(401).json({error: err, validated: false})};
 }
 
 module.exports = { createToken, validateToken }

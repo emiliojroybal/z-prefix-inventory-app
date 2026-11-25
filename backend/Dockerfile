@@ -2,9 +2,10 @@ FROM node:latest
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json ./
+RUN npm ci
 
-RUN npm install
+COPY . .
 
 EXPOSE 3000
 

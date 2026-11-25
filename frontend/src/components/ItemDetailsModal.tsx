@@ -60,11 +60,13 @@ export function ItemDetailsModal({ item, setSelectedItem, setInventoryRefresh }:
                         <div className="box-title">
                             <h3><input type="text" name="itemName" value={formData.itemName} onChange={handleChange}></input></h3>
                             <p>Posted by: {item.user["firstName"]} {item.user["lastName"]} ({item.user["username"]})</p>
-                            <button onClick={() => setEditMode(false)}>View Mode</button>
-                            <button type="button" onClick={() => setShowDelete(true)}>Delete Item</button>
+                            <div className="box-btns">
+                                <button type="button" onClick={() => setEditMode(false)}>View Mode</button>
+                                <button className="delete-btn" type="button" onClick={() => setShowDelete(true)}>Delete Item</button>
+                            </div>
                         </div>
                         <div className="form-entry-field">
-                            <textarea style={{width: "100%", maxWidth: "20rem", boxSizing: "border-box"}} name="description" rows={4} cols={40} value={formData.description} onChange={handleChange}></textarea>
+                            <textarea name="description" rows={4} cols={40} value={formData.description} onChange={handleChange}></textarea>
                         </div>
                         <div className="form-entry-field">
                             <p>Quantity: <input type="text" inputMode="numeric" name="quantity" value={formData.quantity} onChange={handleChange}></input></p>

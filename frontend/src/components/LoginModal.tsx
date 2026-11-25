@@ -51,7 +51,7 @@ export function LoginModal({setShowLogin, setLoggedInUser, setShowSignUp}: {setS
                         <p>Password</p>
                         <input type="password" name="password" value={formData.password} onChange={handleChange}></input>
                     </div>
-                    <p className="account-register-text" onClick={switchToSignUp}>Register for an account</p>
+                    <button className="account-register-text" type="button" onClick={switchToSignUp}>Register for an account</button>
                     <button type="submit">Submit</button>
                 </form>
             </div>

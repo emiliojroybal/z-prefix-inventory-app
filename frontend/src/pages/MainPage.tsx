@@ -47,7 +47,7 @@ export function MainPage() {
             {loggedInUser ? <button onClick={() => setShowNewItem(true)}>+ New Item</button> : ""}
             <div className="inventory-grid">
                 {inventory.filter((item) => !loggedInUser || !showOwnItems || item.user["id"] === loggedInUser.id).map((item) => {
-                    return <ItemBox item={item} setSelectedItem={setSelectedItem} />
+                    return <ItemBox key={item.id} item={item} setSelectedItem={setSelectedItem} />
                 })}
             </div>
         </div>

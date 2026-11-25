@@ -10,9 +10,9 @@ export function ItemBox({ item, setSelectedItem }: { item: item; setSelectedItem
 
     return (
         <button className="itemBox" onClick={() => setSelectedItem(item)}>
-            <h3>{item.itemName}</h3>
-            <p>{itemDescription}</p>
-            <p>Quantity: {item.quantity}</p>
+            <h3 className="itemBoxTitle">{item.itemName}</h3>
+            <p className="itemBoxDescription">{itemDescription}</p>
+            <p className="itemBoxQuantity">Quantity: {item.quantity}</p>
         </button>
     )
 }

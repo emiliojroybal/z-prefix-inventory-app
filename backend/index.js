@@ -1,17 +1,21 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const knex = require('knex')(require('./knexfile')[process.env.NODE_ENV || 'development']);
 const bcrypt = require('bcryptjs');
 const { createToken, validateToken } = require('./JWT');
 const cookieParser = require('cookie-parser')
 
-const PORT = process.env.PORT;
+const PORT = process.env.API_PORT;
 
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:8080',
+    origin: [
+        process.env.FRONTEND_PORT == 80 ? "http://localhost" : `http://localhost:${process.env.FRONTEND_PORT}`,
+        "http://localhost:5173"
+    ],
     credentials: true,
 }));
 app.use(cookieParser());
