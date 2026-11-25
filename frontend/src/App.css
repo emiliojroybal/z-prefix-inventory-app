@@ -256,4 +256,9 @@ input {
 
 .account-register-text:hover {
   color: #1D4ED8;
+  background-color: transparent;
+}
+
+.error-text {
+  color: red;
 }

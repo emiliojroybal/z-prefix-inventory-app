@@ -13,3 +13,7 @@ export type user = {
     lastName: string;
     username: string;
 }
+
+export interface ApiErrorResponse {
+    message?: string
+}
