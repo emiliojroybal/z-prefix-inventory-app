@@ -4,13 +4,14 @@ import { ItemDetailsModal } from "../components/ItemDetailsModal";
 import NewItemModal from "../components/NewItemModal";
 import axios from "axios";
 import AppContext from "../context/AppContext";
+import { type item } from "../types";
 
 export function MainPage() {
-    const [inventory, setInventory] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const [showOwnItems, setShowOwnItems] = useState(true);
-    const [showNewItem, setShowNewItem] = useState(false);
-    const [inventoryRefresh, setInventoryRefresh] = useState(true);
+    const [inventory, setInventory] = useState<Array<item> | []>([]);
+    const [selectedItem, setSelectedItem] = useState<item | null>(null);
+    const [showOwnItems, setShowOwnItems] = useState<boolean>(true);
+    const [showNewItem, setShowNewItem] = useState<boolean>(false);
+    const [inventoryRefresh, setInventoryRefresh] = useState<boolean>(true);
 
     const loggedInUser = useContext(AppContext);
 

@@ -1,20 +1,21 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, type Dispatch, type SetStateAction } from "react";
 import axios from "axios";
 import AppContext from "../context/AppContext";
+import {type user } from "../types";
 
-export default function NewItemModal({setShowNewItem, setInventoryRefresh}: {setShowNewItem: Function, setInventoryRefresh: Function}) {
+export default function NewItemModal({setShowNewItem, setInventoryRefresh}: {setShowNewItem: Dispatch<SetStateAction<boolean>>, setInventoryRefresh: Dispatch<SetStateAction<boolean>>}) {
     const [formData, setFormData] = useState({
         itemName: "",
         description: "",
         quantity: 0
     });
 
-    const loggedInUser = useContext(AppContext);
+    const loggedInUser = useContext<user | null>(AppContext);
 
     const createNewItem = async () => {
         const itemObject = {
             ...formData, 
-            userID: loggedInUser.id,
+            userID: loggedInUser?.id,
         };
         const response = await axios.post("http://localhost:3000/items", itemObject);
         console.log(response);
@@ -40,7 +41,7 @@ export default function NewItemModal({setShowNewItem, setInventoryRefresh}: {set
             <div className="modal-background" onClick={() => setShowNewItem(false)}></div>
             <div className="modal-box">
                 <div className="box-header">
-                    <button className="x-button" onClick={() => setShowNewItem(null)}>X</button>
+                    <button className="x-button" onClick={() => setShowNewItem(false)}>X</button>
                 </div>
                 <form className="box-content" onSubmit={handleSubmit}>
                     <h3>New Item</h3>

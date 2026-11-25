@@ -1,6 +1,7 @@
-import axios from "axios";
+import type { Dispatch, SetStateAction } from "react"
+import { type item } from "../types"
 
-export default function DeletionConfirmationModal({item, deleteItem, setShowDelete}: {item: object, deleteItem: Function, setShowDelete: Function}) {
+export default function DeletionConfirmationModal({item, deleteItem, setShowDelete}: {item: item, deleteItem: () => Promise<void>, setShowDelete: Dispatch<SetStateAction<boolean>>}) {
 
     return (
         <div className="delete-modal">

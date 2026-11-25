@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, type Dispatch, type SetStateAction } from "react"
+import { type user } from "../types";
 import axios from "axios";
 
-export function LoginModal({setShowLogin, setLoggedInUser, setShowSignUp}: {setShowLogin: Function, setLoggedInUser: Function, setShowSignUp: Function}) {
+export function LoginModal({setShowLogin, setLoggedInUser, setShowSignUp}: {setShowLogin: Dispatch<SetStateAction<boolean>>, setLoggedInUser: Dispatch<SetStateAction<user | null>> , setShowSignUp: Dispatch<SetStateAction<boolean>>}) {
     const [formData, setFormData] = useState({
         username: "",
         password: ""

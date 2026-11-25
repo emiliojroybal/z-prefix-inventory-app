@@ -1,6 +1,7 @@
+import type { Dispatch, SetStateAction } from "react";
+import { type item } from "../types"
 
-
-export function ItemBox({ item, setSelectedItem }: { item: object; setSelectedItem: Function }) {
+export function ItemBox({ item, setSelectedItem }: { item: item; setSelectedItem: Dispatch<SetStateAction<item | null>>}) {
 
     let itemDescription = item.description;
     if (itemDescription.length > 100) {

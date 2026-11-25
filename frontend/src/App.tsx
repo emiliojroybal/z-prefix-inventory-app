@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
 import './App.css'
 import { NavBar } from './components/NavBar'
 import { MainPage } from './pages/MainPage'
 import AppContext from './context/AppContext'
-import axios from 'axios'
 import useAuth from './hooks/useAuth'
 
 function App() {
@@ -11,7 +9,7 @@ function App() {
 
   return (
     <AppContext.Provider value={loggedInUser}>
-      <NavBar setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser}/>
+      <NavBar setLoggedInUser={setLoggedInUser}/>
       <div className="main">
         <MainPage />
       </div>

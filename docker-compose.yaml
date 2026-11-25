@@ -30,7 +30,12 @@ services:
       db:
         condition: service_healthy
     command:
-      sh -c "npx knex migrate:latest && npm start"
+      sh -c "npx knex migrate:latest && npx knex seed:run && npm start"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
 
 volumes:
   pgdata:

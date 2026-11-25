@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type Dispatch, type SetStateAction } from "react";
 import axios from "axios";
+import type { user } from "../types";
 
-export default function useAuth() {
-  const [loggedInUser, setLoggedInUser] = useState(null)
+export default function useAuth(): [user | null, Dispatch<SetStateAction<user | null>>] {
+  const [loggedInUser, setLoggedInUser] = useState<user | null>(null)
 
   useEffect(() => {
     const attemptLogin = async () => {

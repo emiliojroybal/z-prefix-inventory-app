@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useState, type Dispatch, type SetStateAction } from "react";
 import DeletionConfirmationModal from "./DeletionConfirmationModal";
 import AppContext from "../context/AppContext";
 import axios from "axios";
+import { type item } from "../types"
 
-
-export function ItemDetailsModal({ item, setSelectedItem, setInventoryRefresh }: { item: object; setSelectedItem: Function, setInventoryRefresh: Function }) {
+export function ItemDetailsModal({ item, setSelectedItem, setInventoryRefresh }: { item: item; setSelectedItem: Dispatch<SetStateAction<item | null>> , setInventoryRefresh: Dispatch<SetStateAction<boolean>>  }) {
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({
         itemName: item.itemName,
@@ -16,7 +16,7 @@ export function ItemDetailsModal({ item, setSelectedItem, setInventoryRefresh }:
     const loggedInUser = useContext(AppContext);
 
     const patchItem = async () => {
-        const response = await axios.patch(`http://localhost:3000/items/${item.id}`, formData);
+        await axios.patch(`http://localhost:3000/items/${item.id}`, formData);
         setEditMode(false);
         setSelectedItem({
             ...item,
@@ -27,8 +27,8 @@ export function ItemDetailsModal({ item, setSelectedItem, setInventoryRefresh }:
         setInventoryRefresh(true);
     }
 
-    const deleteItem = async () => {
-        const response = await axios.delete(`http://localhost:3000/items/${item.id}`);
+    const deleteItem = async (): Promise<void> => {
+        await axios.delete(`http://localhost:3000/items/${item.id}`);
         setEditMode(false);
         setShowDelete(false);
         setSelectedItem(null);
