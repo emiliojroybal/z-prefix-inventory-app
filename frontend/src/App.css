@@ -8,7 +8,7 @@ nav {
   display: flex;
   top: 0;
   width: 100%;
-  height: 10%;
+  height: 10vh;
   background-color: #070C18;
   justify-content: space-between;
   z-index: 10;
@@ -64,9 +64,20 @@ input {
 }
 
 .main-logo {
+  position: absolute;
+  text-align: left;
   background-color: transparent;
   color: white;
   border-color: transparent;
+  width: 80%;
+  height: 100%;
+  white-space: nowrap;
+  font-size: clamp(0.1rem, 2vh, 3rem);
+  padding: 0 1em;
+}
+
+.main-logo:hover {
+  background-color: transparent;
 }
 
 .main-page {
